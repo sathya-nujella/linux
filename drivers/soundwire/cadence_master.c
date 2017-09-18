@@ -848,35 +848,41 @@ EXPORT_SYMBOL(sdw_cdns_exit_reset);
  * sdw_cdns_enable_interrupt() - Enable SDW interrupts and update config
  * @cdns: Cadence instance
  */
-int sdw_cdns_enable_interrupt(struct sdw_cdns *cdns)
+int sdw_cdns_enable_interrupt(struct sdw_cdns *cdns, bool state)
 {
 	u32 mask;
 
-	cdns_writel(cdns, CDNS_MCP_SLAVE_INTMASK0,
-		    CDNS_MCP_SLAVE_INTMASK0_MASK);
-	cdns_writel(cdns, CDNS_MCP_SLAVE_INTMASK1,
-		    CDNS_MCP_SLAVE_INTMASK1_MASK);
+	if (state) {
+		cdns_writel(cdns, CDNS_MCP_SLAVE_INTMASK0,
+			    CDNS_MCP_SLAVE_INTMASK0_MASK);
+		cdns_writel(cdns, CDNS_MCP_SLAVE_INTMASK1,
+			    CDNS_MCP_SLAVE_INTMASK1_MASK);
 
-	/* enable detection of all slave state changes */
-	mask = CDNS_MCP_INT_SLAVE_MASK;
+		/* enable detection of all slave state changes */
+		mask = CDNS_MCP_INT_SLAVE_MASK;
 
-	/* enable detection of bus issues */
-	mask |= CDNS_MCP_INT_CTRL_CLASH | CDNS_MCP_INT_DATA_CLASH |
-		CDNS_MCP_INT_PARITY;
+		/* enable detection of bus issues */
+		mask |= CDNS_MCP_INT_CTRL_CLASH | CDNS_MCP_INT_DATA_CLASH |
+			CDNS_MCP_INT_PARITY;
 
-	/* no detection of port interrupts for now */
+		/* no detection of port interrupts for now */
 
-	/* enable detection of RX fifo level */
-	mask |= CDNS_MCP_INT_RX_WL;
+		/* enable detection of RX fifo level */
+		mask |= CDNS_MCP_INT_RX_WL;
 
-	/*
-	 * CDNS_MCP_INT_IRQ needs to be set otherwise all previous
-	 * settings are irrelevant
-	 */
-	mask |= CDNS_MCP_INT_IRQ;
+		/*
+		 * CDNS_MCP_INT_IRQ needs to be set otherwise all previous
+		 * settings are irrelevant
+		 */
+		mask |= CDNS_MCP_INT_IRQ;
 
-	if (interrupt_mask) /* parameter override */
-		mask = interrupt_mask;
+		if (interrupt_mask) /* parameter override */
+			mask = interrupt_mask;
+	} else {
+		cdns_writel(cdns, CDNS_MCP_SLAVE_INTMASK0, 0);
+		cdns_writel(cdns, CDNS_MCP_SLAVE_INTMASK1, 0);
+		mask = 0;
+	}
 
 	cdns_writel(cdns, CDNS_MCP_INTMASK, mask);
 
