@@ -232,6 +232,22 @@ static int cdns_clear_bit(struct sdw_cdns *cdns, int offset, u32 value)
 }
 
 /*
+ * all changes to the MCP_CONFIG, MCP_CONTROL, MCP_CMDCTRL and MCP_PHYCTRL
+ * need to be confirmed with a write to MCP_CONFIG_UPDATE
+ */
+static int cdns_update_config(struct sdw_cdns *cdns)
+{
+	int ret;
+
+	ret = cdns_clear_bit(cdns, CDNS_MCP_CONFIG_UPDATE,
+			     CDNS_MCP_CONFIG_UPDATE_BIT);
+	if (ret < 0)
+		dev_err(cdns->dev, "Config update timedout\n");
+
+	return ret;
+}
+
+/*
  * debugfs
  */
 #ifdef CONFIG_DEBUG_FS
@@ -784,7 +800,8 @@ static int _cdns_enable_interrupt(struct sdw_cdns *cdns)
 
 	cdns_writel(cdns, CDNS_MCP_INTMASK, mask);
 
-	return 0;
+	/* commit changes */
+	return cdns_update_config(cdns);
 }
 
 /**
@@ -793,15 +810,9 @@ static int _cdns_enable_interrupt(struct sdw_cdns *cdns)
  */
 int sdw_cdns_enable_interrupt(struct sdw_cdns *cdns)
 {
-	int ret;
-
 	_cdns_enable_interrupt(cdns);
-	ret = cdns_clear_bit(cdns, CDNS_MCP_CONFIG_UPDATE,
-			     CDNS_MCP_CONFIG_UPDATE_BIT);
-	if (ret < 0)
-		dev_err(cdns->dev, "Config update timedout\n");
 
-	return ret;
+	return 0;
 }
 EXPORT_SYMBOL(sdw_cdns_enable_interrupt);
 
@@ -1003,7 +1014,8 @@ int sdw_cdns_init(struct sdw_cdns *cdns)
 
 	cdns_writel(cdns, CDNS_MCP_CONFIG, val);
 
-	return 0;
+	/* commit changes */
+	return cdns_update_config(cdns);
 }
 EXPORT_SYMBOL(sdw_cdns_init);
 
