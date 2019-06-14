@@ -118,7 +118,7 @@ int hda_dsp_pcm_hw_params(struct snd_sof_dev *sdev,
 
 	/* set host_period_bytes to 0 if no IPC position */
 	if (hda && hda->no_ipc_position)
-		ipc_params->host_period_bytes = 0;
+		ipc_params->irq_mode = 0;
 
 	ipc_params->stream_tag = hstream->stream_tag;
 
