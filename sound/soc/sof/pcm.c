@@ -157,7 +157,7 @@ static int sof_pcm_hw_params(struct snd_pcm_substream *substream,
 	pcm.params.buffer_fmt = SOF_IPC_BUFFER_INTERLEAVED;
 	pcm.params.rate = params_rate(params);
 	pcm.params.channels = params_channels(params);
-	pcm.params.host_period_bytes = params_period_bytes(params);
+	pcm.params.host_period_bytes = params_period_size(params);
 
 	/* container size */
 	ret = snd_pcm_format_physical_width(params_format(params));
