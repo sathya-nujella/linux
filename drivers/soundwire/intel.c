@@ -1225,6 +1225,8 @@ static int intel_suspend(struct device *dev)
 	struct sdw_intel *sdw;
 	int ret;
 
+	dev_err(dev, "%s\n", __func__);
+
 	sdw = dev_get_drvdata(dev);
 
 	if (sdw->cdns.bus.prop.hw_disabled) {
@@ -1254,6 +1256,8 @@ static int intel_resume(struct device *dev)
 {
 	struct sdw_intel *sdw;
 	int ret;
+
+	dev_err(dev, "%s\n", __func__);
 
 	sdw = dev_get_drvdata(dev);
 
