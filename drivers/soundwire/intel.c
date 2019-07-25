@@ -1271,6 +1271,11 @@ static int intel_resume(struct device *dev)
 		return ret;
 	}
 
+	/* add delay to let Slaves re-enumerate */
+	usleep_range(20000, 30000);
+
+	dev_dbg(dev, "%s done\n", __func__);
+
 	return ret;
 }
 
