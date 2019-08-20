@@ -155,7 +155,6 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	{
 		.name = "SDW0-Playback",
 		.id = 0,
-		.ignore_suspend = 1,
 		.no_pcm = 1,
 		.dpcm_playback = 1,
 		.nonatomic = true,
@@ -164,7 +163,6 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	{
 		.name = "SDW0-Capture",
 		.id = 1,
-		.ignore_suspend = 1,
 		.no_pcm = 1,
 		.dpcm_capture = 1,
 		.nonatomic = true,
