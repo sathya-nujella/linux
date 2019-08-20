@@ -64,7 +64,6 @@ static int cnl_card_late_probe(struct snd_soc_card *card)
 	int err, i = 0;
 	char jack_name[NAME_SIZE];
 
-	pr_err("bard: %s\n", __func__);
 	list_for_each_entry(pcm, &ctx->hdmi_pcm_list, head) {
 		component = pcm->codec_dai->component;
 		snprintf(jack_name, sizeof(jack_name),
@@ -261,7 +260,7 @@ static int snd_cnl_rt700_mc_probe(struct platform_device *pdev)
 	/* Register the card */
 	ret = devm_snd_soc_register_card(&pdev->dev, card);
 	if (ret) {
-		pr_err("snd_soc_register_card failed %d\n", ret);
+		dev_err(card->dev, "snd_soc_register_card failed %d\n", ret);
 		return ret;
 	}
 	platform_set_drvdata(pdev, &snd_soc_card_cnl_rt700);
