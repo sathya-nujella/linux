@@ -115,34 +115,6 @@ static const struct snd_kcontrol_new cnl_rt700_controls[] = {
 	SOC_DAPM_PIN_SWITCH("Speaker"),
 };
 
-static int cnl_rt700_codec_fixup(struct snd_soc_pcm_runtime *rtd,
-			    struct snd_pcm_hw_params *params)
-{
-	struct snd_soc_dai *be_cpu_dai;
-	int slot_width = 24;
-	int ret = 0;
-	struct snd_interval *rate = hw_param_interval(params,
-			SNDRV_PCM_HW_PARAM_RATE);
-	struct snd_interval *channels = hw_param_interval(params,
-						SNDRV_PCM_HW_PARAM_CHANNELS);
-
-	pr_debug("Invoked %s for dailink %s\n", __func__, rtd->dai_link->name);
-	slot_width = 24;
-	rate->min = rate->max = 48000;
-	channels->min = channels->max = 2;
-
-	snd_mask_none(hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT));
-	snd_mask_set(hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT),
-						SNDRV_PCM_FORMAT_S24_LE);
-
-	pr_info("param width set to:0x%x\n",
-			snd_pcm_format_width(params_format(params)));
-	pr_info("Slot width = %d\n", slot_width);
-
-	be_cpu_dai = rtd->cpu_dai;
-	return ret;
-}
-
 SND_SOC_DAILINK_DEF(sdw0_pin2,
 	DAILINK_COMP_ARRAY(COMP_CPU("SDW0 Pin2")));
 SND_SOC_DAILINK_DEF(sdw0_pin3,
@@ -183,7 +155,6 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	{
 		.name = "SDW0-Playback",
 		.id = 0,
-		.be_hw_params_fixup = cnl_rt700_codec_fixup,
 		.ignore_suspend = 1,
 		.no_pcm = 1,
 		.dpcm_playback = 1,
@@ -193,7 +164,6 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	{
 		.name = "SDW0-Capture",
 		.id = 1,
-		.be_hw_params_fixup = cnl_rt700_codec_fixup,
 		.ignore_suspend = 1,
 		.no_pcm = 1,
 		.dpcm_capture = 1,
