@@ -169,7 +169,7 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	},
 	{
 		.name = "dmic01",
-		.id = 1,
+		.id = 2,
 		.ignore_suspend = 1,
 		.dpcm_capture = 1,
 		.no_pcm = 1,
@@ -177,7 +177,7 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	},
 	{
 		.name = "dmic16k",
-		.id = 2,
+		.id = 3,
 		.dpcm_capture = 1,
 		.no_pcm = 1,
 		SND_SOC_DAILINK_REG(dmic16k_pin, dmic_codec, platform),
@@ -185,7 +185,7 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 #if IS_ENABLED(CONFIG_SND_SOC_HDAC_HDMI)
 	{
 		.name = "iDisp1",
-		.id = 3,
+		.id = 4,
 		.init = cnl_hdmi_init,
 		.no_pcm = 1,
 		.dpcm_playback = 1,
@@ -193,7 +193,7 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	},
 	{
 		.name = "iDisp2",
-		.id = 4,
+		.id = 5,
 		.init = cnl_hdmi_init,
 		.no_pcm = 1,
 		.dpcm_playback = 1,
@@ -201,7 +201,7 @@ struct snd_soc_dai_link cnl_rt700_msic_dailink[] = {
 	},
 	{
 		.name = "iDisp3",
-		.id = 5,
+		.id = 6,
 		.init = cnl_hdmi_init,
 		.no_pcm = 1,
 		.dpcm_playback = 1,
