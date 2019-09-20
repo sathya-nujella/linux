@@ -465,6 +465,20 @@ endif ## SND_SOC_SOF_COMETLAKE_LP && SND_SOC_SOF_HDA_LINK
 
 if SND_SOC_SOF_TIGERLAKE
 
+config SND_SOC_INTEL_TGL_MAX98373_RT5682_MACH
+	tristate "TGL with MAX98373 and RT5682 in I2S Mode"
+	depends on I2C && ACPI
+	depends on MFD_INTEL_LPSS
+	select SND_SOC_MAX98373
+	select SND_SOC_RT5682
+	select SND_SOC_DMIC
+	select SND_SOC_HDAC_HDMI if SND_SOC_SOF_HDA_LINK
+	help
+	   This adds support for ASoC machine driver for Tigerlake platforms
+	   with MAX98373 and RT5682 I2S audio codec.
+	   Say Y if you have such a device.
+	   If unsure select "N".
+
 config SND_SOC_INTEL_TGL_RT1308_MACH
 	tristate "TGL with RT1308 in I2S Mode"
 	depends on I2C && ACPI
