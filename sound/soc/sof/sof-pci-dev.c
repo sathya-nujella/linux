@@ -35,6 +35,10 @@ MODULE_PARM_DESC(sof_debug, "SOF PCI debug options (0x0 all off)");
 
 #define SOF_PCI_DISABLE_PM_RUNTIME BIT(0)
 
+static int audio_aic_select;
+module_param(audio_aic_select, int, 0644);
+MODULE_PARM_DESC(audio_aic_select, "Audio AIC Selection");
+
 #if IS_ENABLED(CONFIG_SND_SOC_SOF_APOLLOLAKE)
 static const struct sof_dev_desc bxt_desc = {
 	.machines		= snd_soc_acpi_intel_bxt_machines,
@@ -325,6 +329,11 @@ static int sof_pci_probe(struct pci_dev *pci,
 	if (!mach) {
 		dev_warn(dev, "warning: No matching ASoC machine driver found\n");
 	} else {
+		if(audio_aic_select == 1) {
+			printk("selecting Audio AIC: %d\n",audio_aic_select);
+			mach->drv_name="tgl_max98373_rt5682";
+			mach->sof_tplg_filename = "sof-tgl-max98373-rt5682.tplg";
+		}
 		mach->mach_params.platform = dev_name(dev);
 		sof_pdata->fw_filename = mach->sof_fw_filename;
 		sof_pdata->tplg_filename = mach->sof_tplg_filename;
