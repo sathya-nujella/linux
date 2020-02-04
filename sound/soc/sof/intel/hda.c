@@ -293,6 +293,11 @@ module_param_named(use_common_hdmi, hda_codec_use_common_hdmi, bool, 0444);
 MODULE_PARM_DESC(use_common_hdmi, "SOF HDA use common HDMI codec driver");
 #endif
 
+static int audio_aic_select;
+module_param(audio_aic_select, int, 0644);
+MODULE_PARM_DESC(audio_aic_select, "Audio AIC Selection");
+
+
 static const struct hda_dsp_msg_code hda_dsp_rom_msg[] = {
 	{HDA_DSP_ROM_FW_MANIFEST_LOADED, "status: manifest loaded"},
 	{HDA_DSP_ROM_FW_FW_LOADED, "status: fw loaded"},
@@ -1173,6 +1178,12 @@ void hda_machine_select(struct snd_sof_dev *sdev)
 
 	mach = snd_soc_acpi_find_machine(desc->machines);
 	if (mach) {
+		if(audio_aic_select == 1) {
+			printk("selecting Audio AIC: %d\n",audio_aic_select);
+			mach->drv_name="tgl_max98373_rt5682";
+			mach->sof_tplg_filename = "sof-tgl-max98373-rt5682.tplg";
+		}
+		printk("tplg %s drv_name %s\n",mach->sof_tplg_filename, mach->drv_name);
 		sof_pdata->tplg_filename = mach->sof_tplg_filename;
 		sof_pdata->machine = mach;
 	}
