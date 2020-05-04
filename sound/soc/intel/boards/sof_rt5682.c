@@ -753,8 +753,10 @@ static int sof_audio_probe(struct platform_device *pdev)
 	if (sof_rt5682_quirk & SOF_SPEAKER_AMP_PRESENT)
 		sof_audio_card_rt5682.num_links++;
 
-	if (sof_rt5682_quirk & SOF_MAX98373_SPEAKER_AMP_PRESENT)
+	if (sof_rt5682_quirk & SOF_MAX98373_SPEAKER_AMP_PRESENT){
 		sof_max98373_codec_conf(&sof_audio_card_rt5682);
+		sof_audio_card_rt5682.name="tgl_max73rt82";
+	}
 
 	dai_links = sof_card_dai_links_create(&pdev->dev, ssp_codec, ssp_amp,
 					      dmic_be_num, hdmi_num);
